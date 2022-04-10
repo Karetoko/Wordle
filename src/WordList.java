@@ -4,9 +4,9 @@ import java.nio.file.Paths;
 
 public class WordList {
     private String[] list;
-    private String selected;
     private int pos;
     private int charSize;
+    private String selected = "";
 
     private final int SHORT = 2184;
     private final int MEDIUM = 5459;
@@ -19,6 +19,18 @@ public class WordList {
         this.pos = 0;
         this.selected = "";
 
+    }
+    public String getSelected() {
+        return this.selected;
+    }
+
+    public boolean goNext(String word) {
+        this.list[pos] = word;
+        if (pos + 1 == list.length) {
+            return true;
+        }
+        pos++;
+        return false;
     }
 
     public void randSelect() throws IOException {

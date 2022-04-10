@@ -34,9 +34,10 @@ public class main {
          Challenges for me personally:
          - I have NO IDEA how to work with libraries. Like nada, none.
          - How to confront this project regarding workflow and such.
-         - Maybe APIs will be needed here, which would open some completely new topics to me (and I don't have that much time lmao)
+         - Maybe APIs will be needed here, which would open some completely new topics to me (and I don't have that much time lmao) --> Update: APIs are overkill, not needed xd
          - optional: I had the idea of working with mouse scanners, but this might add an extra layer of complexity.
         */
+
         CodeDraw cd =  new CodeDraw(720,720);
         TextFormat format = cd.getTextFormat();
         format.setFontName("Bahnschrift");
@@ -90,6 +91,7 @@ public class main {
         format.setFontSize(25);
         cd.drawText(360, 250, "Allowed length: 4 - 10 characters");
         cd.show();
+        System.out.println("Enter here...");
 
         boolean correctEnter = false;
         int wordLength = 0;
@@ -133,28 +135,41 @@ public class main {
                 cd.show();
                 cd.setColor(Color.BLACK);
 
+                System.out.println("Not an integer!");
                 cd.drawText(360, 400, "Not an integer!");
                 cd.show();
                 scanner.next();
             }
         }
-
-
-
-
-
-
-
-
-
-
+        cd.show(1000);
+        cd.clear();
+        cd.drawText(360, 20, "Wordle");
+        cd.fillRectangle(0,60,720,5);
+        cd.show();
 
         // while (true) {
-            WordList test = new WordList(5,4);
+            WordList test = new WordList(6,wordLength);
+            WordleDraw draw = new WordleDraw(wordLength,6);
             test.randSelect();
-            System.out.println(test.isWord("salt"));
-
+            draw.giveWord(test.getSelected());
+            System.out.println(test.isWord("swift"));
+            System.out.println(test.getSelected());
+            System.out.println("black");
+            draw.giveInput("black");
+            draw.drawAlphabet(cd);
 
         // }
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
