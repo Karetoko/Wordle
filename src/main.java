@@ -166,7 +166,6 @@ public class main {
             test.randSelect();
             String randomWord = test.getSelected();
             System.out.println(randomWord);
-            System.out.println();
             WordleDrawNew givenWord = new WordleDrawNew(test.getSelected());
             givenWord.create();
             int[] pos = calculatePosition(wordLength);
@@ -201,18 +200,19 @@ public class main {
                         System.out.println("Word does not exist!");
                     }
                 }
+
                 WordleDrawNew userInput = new WordleDrawNew(inputWord.toLowerCase());
                 userInput.create();
 
                 boolean[] perfect = userInput.isPerfectMatch(randomWord);
                 boolean[] contained = userInput.isContained(randomWord, perfect);
                 for (int i = 0; i < wordLength; i++) {
-                    if (contained[i]) {
-                        cd.setColor(Color.CYAN);
+                    if (perfect[i]) {
+                        cd.setColor(Color.GREEN);
                         cd.fillRectangle(pos[i] - 25,30 + round * 100 - 18 ,50, 60); // IMPORTANT
                         cd.setColor(Color.BLACK);
-                    } else if (perfect[i]) {
-                        cd.setColor(Color.GREEN);
+                    } else if (contained[i]) {
+                        cd.setColor(Color.CYAN);
                         cd.fillRectangle(pos[i] - 25,30 + round * 100 - 18 ,50, 60); // IMPORTANT
                         cd.setColor(Color.BLACK);
                     }
@@ -225,12 +225,44 @@ public class main {
                 }
                 format.setFontSize(50);
                 cd.show();
+                inputWord = inputWord.toLowerCase();
+
                 round++;
                 if (round == 7) {
                     end = true;
                 }
+
+                if (inputWord.equals(randomWord)) {
+                    won = true;
+                    end = true;
+                }
+            }
+
+            cd.show(3000);
+            cd.setColor(Color.WHITE);
+            cd.fillRectangle(0, 100, 720, 720 );
+            cd.setColor(Color.BLACK);
+            if (won) {
+                format.setFontSize(30);
+                cd.drawText(360, 200, "Congratulations, you won!");
+                cd.drawText(360, 250, "The word was");
+                format.setFontSize(85);
+                cd.drawText(360, 550, randomWord + "!");
+                format.setFontSize(50);
+                cd.show();
+            } else {
+                format.setFontSize(30);
+                cd.drawText(360, 200, "Oh well, better luck next time!");
+                cd.drawText(360, 250, "The word was");
+                format.setFontSize(85);
+                cd.drawText(360, 550, randomWord + "!");
+                format.setFontSize(50);
             }
             cd.show(5000);
+            cd.setColor(Color.WHITE);
+            cd.fillRectangle(0, 100, 720, 720 );
+            cd.show();
+            cd.setColor(Color.BLACK);
         }
     }
 

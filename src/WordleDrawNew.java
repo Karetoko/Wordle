@@ -41,22 +41,6 @@ public class WordleDrawNew {
         }
     }
 
-    // deletes a node on a certain position (in the word!)
-    public void delete(int position) {
-        WordleDrawNewNode temp = head;
-        boolean found = false;
-        while (!found) {
-            if (temp.getPos() == position) {
-                found = true;
-            } else {
-                temp = temp.next();
-            }
-        }
-        WordleDrawNewNode setPrev = temp.prev();
-        WordleDrawNewNode setNext = temp.next();
-        setPrev.setNext(temp.next());
-        setNext.setPrev(temp.prev());
-    }
 
     public boolean[] isPerfectMatch(String givenWord) {
         boolean[] output = new boolean[givenWord.length()];
