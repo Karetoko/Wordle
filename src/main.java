@@ -7,6 +7,7 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Locale;
 import java.util.Scanner;
 
 
@@ -148,6 +149,7 @@ public class main {
         cd.show();
 
         // while (true) {
+        /*
             WordList test = new WordList(6,wordLength);
             WordleDraw draw = new WordleDraw(wordLength,6);
             test.randSelect();
@@ -157,19 +159,98 @@ public class main {
             System.out.println("black");
             draw.giveInput("black");
             draw.drawAlphabet(cd);
-
+         */
         // }
+        while (true) {
+            WordList test = new WordList(6, wordLength);
+            test.randSelect();
+            String randomWord = test.getSelected();
+            System.out.println(randomWord);
+            System.out.println();
+            WordleDrawNew givenWord = new WordleDrawNew(test.getSelected());
+            givenWord.create();
+            int[] pos = calculatePosition(wordLength);
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < wordLength; j++) {
+                    cd.setColor(Color.LIGHT_GRAY);
+                    cd.fillRectangle(pos[j] - 25,30 + (i + 1) * 100 - 18 ,50, 60); // IMPORTANT
+                    cd.setColor(Color.BLACK);
+                }
+            }
+            cd.show();
+            boolean end = false;
+            boolean won = false;
+            int round = 1;
+            while (!end) {
+                System.out.println();
+                boolean foundWord = false;
+                String inputWord = "";
+                while (!foundWord && round < 7) {
+                    String word = scanner.next();
+                    word = word.toLowerCase();
+                    if (word.length() != wordLength) {
+                        if (word.length() < wordLength) {
+                            System.out.println("Word too short!");
+                        } else {
+                            System.out.println("Word too long!");
+                        }
+                    } else if (test.isWord(word)) { // if true
+                        foundWord = true;
+                        inputWord = word;
+                    } else {
+                        System.out.println("Word does not exist!");
+                    }
+                }
+                WordleDrawNew userInput = new WordleDrawNew(inputWord.toLowerCase());
+                userInput.create();
 
+                boolean[] perfect = userInput.isPerfectMatch(randomWord);
+                boolean[] contained = userInput.isContained(randomWord, perfect);
+                for (int i = 0; i < wordLength; i++) {
+                    if (contained[i]) {
+                        cd.setColor(Color.CYAN);
+                        cd.fillRectangle(pos[i] - 25,30 + round * 100 - 18 ,50, 60); // IMPORTANT
+                        cd.setColor(Color.BLACK);
+                    } else if (perfect[i]) {
+                        cd.setColor(Color.GREEN);
+                        cd.fillRectangle(pos[i] - 25,30 + round * 100 - 18 ,50, 60); // IMPORTANT
+                        cd.setColor(Color.BLACK);
+                    }
+                }
+                cd.show();
+                inputWord = inputWord.toUpperCase();
+                format.setFontSize(50);
+                for (int i = 0; i < wordLength; i++) {
+                    cd.drawText(pos[i],30 + round * 100, "" + inputWord.charAt(i));
+                }
+                format.setFontSize(50);
+                cd.show();
+                round++;
+                if (round == 7) {
+                    end = true;
+                }
+            }
+            cd.show(5000);
+        }
+    }
 
-
-
-
-
-
-
-
-
-
+    public static int[] calculatePosition(int amount) { // Given interval: (4,10)
+        // Workable area: 616px horizontal; distance between words: 56px
+        int[] output = new int[amount];
+        if (amount % 2 == 1) {
+            int countOdd = amount;
+            for (int i = 0; i < amount; i++) {
+                output[i] = 80 + (int) (-0.5*amount + 5.5) * 56 + i * 56;
+            }
+        } else {
+            int countEven = amount;
+            for (int i = 0; i < amount; i++) {
+                output[i] = 80 + 28 + (int) (-0.5*amount + 5) * 56 + i * 56;
+            }
+        }
+        return output;
 
     }
+
+
 }

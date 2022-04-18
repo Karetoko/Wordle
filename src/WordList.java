@@ -20,6 +20,10 @@ public class WordList {
         this.selected = "";
 
     }
+    public void addSelected(String word) {
+        this.selected = word;
+    }
+
     public String getSelected() {
         return this.selected;
     }
