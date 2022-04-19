@@ -24,7 +24,7 @@ public class main {
 
          What variables should be available for the user to customize?
          - Let user choose the lenght at which word should be played with [min: 4, max: maybe 10? Just shouldn't bee too long, because the search will be slow by then probably]
-         - Let user choose how many guesses he/she can do [min: 4, max: 8]
+         - Let user choose how many guesses he/she can do [min: 4, max: 8] --> scrapped
          - optional: Let user choose what kind of words he should guess (e.g. noun, verb, adjective,...)
 
          What should be returned to be visible for the user?
@@ -34,7 +34,7 @@ public class main {
 
          Challenges for me personally:
          - I have NO IDEA how to work with libraries. Like nada, none.
-         - How to confront this project regarding workflow and such.
+         - How to confront this project regarding workflow and such. --> more planning would be good, I wrote quite a bit of unnecessary code...
          - Maybe APIs will be needed here, which would open some completely new topics to me (and I don't have that much time lmao) --> Update: APIs are overkill, not needed xd
          - optional: I had the idea of working with mouse scanners, but this might add an extra layer of complexity.
         */
@@ -79,12 +79,6 @@ public class main {
             cd.show();
         }
 
-        /*
-        cd.onKeyDown(a -> {
-            System.out.println("test");
-        });
-        */
-
         cd.show(1000);
         format.setFontSize(40);
         cd.drawText(360, 180, "How long should the word be?");
@@ -94,6 +88,8 @@ public class main {
         cd.show();
         System.out.println("Enter here...");
 
+
+        // checks if length input is correct
         boolean correctEnter = false;
         int wordLength = 0;
         format.setFontSize(50);
@@ -142,30 +138,20 @@ public class main {
                 scanner.next();
             }
         }
-        cd.show(1000);
+
+        // header
+        cd.show(1500);
         cd.clear();
         cd.drawText(360, 20, "Wordle");
         cd.fillRectangle(0,60,720,5);
         cd.show();
 
-        // while (true) {
-        /*
-            WordList test = new WordList(6,wordLength);
-            WordleDraw draw = new WordleDraw(wordLength,6);
-            test.randSelect();
-            draw.giveWord(test.getSelected());
-            System.out.println(test.isWord("swift"));
-            System.out.println(test.getSelected());
-            System.out.println("black");
-            draw.giveInput("black");
-            draw.drawAlphabet(cd);
-         */
-        // }
+        // runs until user closes window
         while (true) {
             WordList test = new WordList(6, wordLength);
             test.randSelect();
             String randomWord = test.getSelected();
-            System.out.println(randomWord);
+            // System.out.println(randomWord);
             WordleDrawNew givenWord = new WordleDrawNew(test.getSelected());
             givenWord.create();
             int[] pos = calculatePosition(wordLength);
@@ -180,10 +166,12 @@ public class main {
             boolean end = false;
             boolean won = false;
             int round = 1;
+            // runs either at most six times or if word has been guessed
             while (!end) {
                 System.out.println();
                 boolean foundWord = false;
                 String inputWord = "";
+                // checks if word is valid
                 while (!foundWord && round < 7) {
                     String word = scanner.next();
                     word = word.toLowerCase();
@@ -204,6 +192,7 @@ public class main {
                 WordleDrawNew userInput = new WordleDrawNew(inputWord.toLowerCase());
                 userInput.create();
 
+                //draws the green/blue fields --> perfect match/contains word
                 boolean[] perfect = userInput.isPerfectMatch(randomWord);
                 boolean[] contained = userInput.isContained(randomWord, perfect);
                 for (int i = 0; i < wordLength; i++) {
@@ -231,14 +220,18 @@ public class main {
                 if (round == 7) {
                     end = true;
                 }
-
                 if (inputWord.equals(randomWord)) {
                     won = true;
                     end = true;
                 }
             }
 
-            cd.show(3000);
+            // end screen
+            if (!won) {
+                cd.show(3000);
+            } else {
+                cd.show(500);
+            }
             cd.setColor(Color.WHITE);
             cd.fillRectangle(0, 100, 720, 720 );
             cd.setColor(Color.BLACK);
@@ -247,7 +240,7 @@ public class main {
                 cd.drawText(360, 200, "Congratulations, you won!");
                 cd.drawText(360, 250, "The word was");
                 format.setFontSize(85);
-                cd.drawText(360, 550, randomWord + "!");
+                cd.drawText(360, 500, randomWord + "!");
                 format.setFontSize(50);
                 cd.show();
             } else {
@@ -255,7 +248,7 @@ public class main {
                 cd.drawText(360, 200, "Oh well, better luck next time!");
                 cd.drawText(360, 250, "The word was");
                 format.setFontSize(85);
-                cd.drawText(360, 550, randomWord + "!");
+                cd.drawText(360, 500, randomWord + "!");
                 format.setFontSize(50);
             }
             cd.show(5000);
@@ -265,6 +258,7 @@ public class main {
             cd.setColor(Color.BLACK);
         }
     }
+
 
     public static int[] calculatePosition(int amount) { // Given interval: (4,10)
         // Workable area: 616px horizontal; distance between words: 56px
@@ -281,8 +275,5 @@ public class main {
             }
         }
         return output;
-
     }
-
-
 }
